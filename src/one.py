@@ -1,10 +1,8 @@
 import os
-import glob
 
 
-def print_files_by_size(path):
-    files = []
-    subfolders = []
+files = []
+def get_files_by_size(path):
     for entry in os.scandir(path):
         try:
             is_dir = entry.is_dir(follow_symlinks=False)
@@ -12,7 +10,7 @@ def print_files_by_size(path):
             print(e)
             continue
         if is_dir:
-            subfolders.append(entry.path)
+            get_files_by_size(entry.path)
         else:
             try:
                 if not entry.name.startswith('.'):
@@ -20,21 +18,31 @@ def print_files_by_size(path):
             except OSError as e:
                 print(e)
 
-    return files
+    # sort by size, then path
+    sorted_files = sorted(files, key=lambda x: (x[2], x[0]))
+    return sorted_files
+
+def format_size(number):
+    sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+    i = 0
+    converted = number
+ 
+    while number >= 1024 and i < len(sizes):
+        converted = number/1024.0
+        i += 1
+        number = number/1024
+ 
+    return str(round(converted, 2)) + " " + sizes[i]
+
+def nice_table(data):
+    columns = ['Path', 'Name', 'Size']
+    print("{:<80} {:<10} {:<10}".format(*columns))
+    for row in data:
+        print("{:<80} {:<10} {:<10}".format(row[0], row[1], format_size(row[2])))
 
 
-def using_walk(path):
-    for cur, _dirs, files in os.walk(path):
-        pass
+# nice_table([['one', 'two', 3333], ['four', 'five', 666]])
 
-def scandir_again(path):
-    for entry in os.scandir(path):
-        if entry.is_dir:
-            scandir_again(path)
-        print(entry.path)
 
-def try_glob(path):
-    for filename in glob.iglob(path + '**/**', recursive=True):
-        print(filename)
 
-print(try_glob('/home/justin/test/'))
+nice_table(get_files_by_size('/home/justin/test/'))
