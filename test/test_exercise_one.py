@@ -9,16 +9,21 @@ class TestExerciseOne(unittest.TestCase):
         self.assertEqual(result, '0 B')
 
     def test_format_bytes(self):
-        pass
+        result = one.format_size(123)
+        self.assertEqual(result, '123 B')
 
     def test_format_kb(self):
-        pass
+        result = one.format_size(1234)
+        self.assertEqual(result,'1.21 KB')
 
     def test_format_mb(self):
-        pass
+        result = one.format_size(1234567)
+        self.assertEqual(result, '1.18 MB')
 
     def test_format_gb(self):
-        pass
+        result = one.format_size(4567000000)
+        self.assertEqual(result, '4.25 GB')
 
     def test_format_tb(self):
-        pass
+        result = one.format_size(7890000000000)
+        self.assertEqual(result, '7.18 TB')
