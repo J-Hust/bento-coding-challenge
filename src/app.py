@@ -5,7 +5,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--module", help="Run the specified module.  Accepts ['one', 'two']")
-parser.add_argument("--path", help="Path to be supplied to module one", default="")
+parser.add_argument("--path", help="Path to be supplied to module one.  Note: only tested on unix filesystem", default="")
 parser.add_argument("--string", help="String to be supplied to module two", default="")
 args = parser.parse_args()
 

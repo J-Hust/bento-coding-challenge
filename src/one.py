@@ -3,7 +3,7 @@ import os
 
 files = []
 def get_files_by_size(path):
-    '''Takes in a path as a string and returns a list of tuples containing the path, filename, and size'''
+    '''Takes in a path as a string and returns a list of lists containing the path, filename, and size'''
     for entry in os.scandir(path):
         try:
             is_dir = entry.is_dir(follow_symlinks=False)
