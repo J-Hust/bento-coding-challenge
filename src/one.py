@@ -3,12 +3,16 @@ import os
 
 files = []
 def get_files_by_size(path):
+    '''Takes in a path as a string and returns a list of lists containing the path, filename, and size'''
+
     for entry in os.scandir(path):
         try:
             is_dir = entry.is_dir(follow_symlinks=False)
         except OSError as e:
             print(e)
             continue
+        except FileNotFoundError as e:
+            return e.strerror
         if is_dir:
             get_files_by_size(entry.path)
         else:
@@ -23,6 +27,8 @@ def get_files_by_size(path):
     return sorted_files
 
 def format_size(number):
+    '''Takes in a number specified in bytes and converts to a human-readable size representation'''
+
     sizes = ['B', 'KB', 'MB', 'GB', 'TB']
     i = 0
     converted = number
@@ -32,23 +38,31 @@ def format_size(number):
         i += 1
         number = number/1024
  
-    return str(round(converted, 2)) + " " + sizes[i]
+    return str(round(converted, 2)) + ' ' + sizes[i]
 
-def nice_table(data):
-    columns = ['Path', 'Name', 'Size']
-    col_one_length = len(max(data, key=lambda x: len(x[0]))[0])
-    col_two_length = len(max(data, key=lambda x: len(x[1]))[1])
-    col_three_length = len(str(max(data, key=lambda x: len(str(x[2])))[2]))
+def format_table(data):
+    '''Formats the result of `get_files_by_size` into tabular format'''
 
-    print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(*columns, 
-                                                                                    col_one_length=col_one_length, 
-                                                                                    col_two_length=col_two_length, 
-                                                                                    col_three_length=col_three_length))
-    for row in data:
-        print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(row[0], row[1], format_size(row[2]), 
+    if not len(data):
+        print('no files found for given path')
+    else:
+        columns = ['Path', 'Name', 'Size']
+        col_one_length = len(max(data, key=lambda x: len(x[0]))[0])
+        col_two_length = len(max(data, key=lambda x: len(x[1]))[1])
+        col_three_length = len(str(max(data, key=lambda x: len(str(x[2])))[2]))
+
+        print('{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}'.format(*columns, 
                                                                                         col_one_length=col_one_length, 
                                                                                         col_two_length=col_two_length, 
                                                                                         col_three_length=col_three_length))
+        for row in data:
+            print('{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}'.format(row[0], row[1], format_size(row[2]), 
+                                                                                            col_one_length=col_one_length, 
+                                                                                            col_two_length=col_two_length, 
+                                                                                            col_three_length=col_three_length))
 
 
-nice_table(get_files_by_size('/home/justin/test/'))
+def run(path):
+    '''Called from the command line in `app.py`'''
+    
+    format_table(get_files_by_size(path))

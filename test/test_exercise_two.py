@@ -1,6 +1,7 @@
 import unittest
 from src.two import count_recurring
 
+
 class TestExerciseTwo(unittest.TestCase):
 
     def test_no_repeating(self):
@@ -18,6 +19,10 @@ class TestExerciseTwo(unittest.TestCase):
     def test_all_recurring(self):
         result = count_recurring('rrdd')
         self.assertEqual(result, 'r2d2')
+
+    def test_not_repeating_at_end(self):
+        result = count_recurring('aabbcddeb')
+        self.assertEqual(result, 'a2b2cd2eb')
 
 
 if __name__ == '__main__':
