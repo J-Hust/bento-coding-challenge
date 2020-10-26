@@ -19,7 +19,7 @@ def get_files_by_size(path):
                 print(e)
 
     # sort by size, then path
-    sorted_files = sorted(files, key=lambda x: (x[2], x[0]))
+    sorted_files = sorted(files, key=lambda x: (x[2], x[0]), reverse=True)
     return sorted_files
 
 def format_size(number):
@@ -36,9 +36,16 @@ def format_size(number):
 
 def nice_table(data):
     columns = ['Path', 'Name', 'Size']
-    print("{:<80} {:<10} {:<10}".format(*columns))
+    col_one_length = len(max(data, key=len))
+    col_one_length = max(len(word) for word in data)
+    col_one_length = len(max(data, key=lambda x: len(x[0]))[0])
+    col_two_length = len(max(data, key=lambda x: len(x[1]))[1])
+    col_three_length = len(str(max(data, key=lambda x: len(str(x[2])))[2]))
+
+    print(f'col length: {col_one_length}')
+    print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(*columns, col_one_length=col_one_length, col_two_length=col_two_length, col_three_length=col_three_length))
     for row in data:
-        print("{:<80} {:<10} {:<10}".format(row[0], row[1], format_size(row[2])))
+        print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(row[0], row[1], format_size(row[2]), col_one_length=col_one_length, col_two_length=col_two_length, col_three_length=col_three_length))
 
 
 # nice_table([['one', 'two', 3333], ['four', 'five', 666]])
