@@ -9,6 +9,8 @@ def get_files_by_size(path):
         except OSError as e:
             print(e)
             continue
+        except FileNotFoundError as e:
+            return e.strerror
         if is_dir:
             get_files_by_size(entry.path)
         else:
@@ -32,23 +34,27 @@ def format_size(number):
         i += 1
         number = number/1024
  
-    return str(round(converted, 2)) + " " + sizes[i]
+    return str(round(converted, 2)) + ' ' + sizes[i]
 
 def nice_table(data):
-    columns = ['Path', 'Name', 'Size']
-    col_one_length = len(max(data, key=lambda x: len(x[0]))[0])
-    col_two_length = len(max(data, key=lambda x: len(x[1]))[1])
-    col_three_length = len(str(max(data, key=lambda x: len(str(x[2])))[2]))
+    if not len(data):
+        print('no files found for given path')
+    else:
+        columns = ['Path', 'Name', 'Size']
+        col_one_length = len(max(data, key=lambda x: len(x[0]))[0])
+        col_two_length = len(max(data, key=lambda x: len(x[1]))[1])
+        col_three_length = len(str(max(data, key=lambda x: len(str(x[2])))[2]))
 
-    print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(*columns, 
-                                                                                    col_one_length=col_one_length, 
-                                                                                    col_two_length=col_two_length, 
-                                                                                    col_three_length=col_three_length))
-    for row in data:
-        print("{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}".format(row[0], row[1], format_size(row[2]), 
+        print('{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}'.format(*columns, 
                                                                                         col_one_length=col_one_length, 
                                                                                         col_two_length=col_two_length, 
                                                                                         col_three_length=col_three_length))
+        for row in data:
+            print('{:<{col_one_length}} {:{col_two_length}} {:<{col_three_length}}'.format(row[0], row[1], format_size(row[2]), 
+                                                                                            col_one_length=col_one_length, 
+                                                                                            col_two_length=col_two_length, 
+                                                                                            col_three_length=col_three_length))
 
 
-nice_table(get_files_by_size('/home/justin/test/'))
+def run(path):
+    nice_table(get_files_by_size(path))
