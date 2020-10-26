@@ -1,28 +1,19 @@
-import re
+import itertools
 
-def count_recurring(string) : 
-  
+
+def count_recurring(string):
+
     new_string = ''
     i = 0
+    count = 1
     
-    while i < len(string) - 1: 
-        count = 1
-
-        while string[i] == string[i + 1]:
-            i += 1
+    for x, y in itertools.zip_longest(string, string[1:]):
+        if x == y:
             count += 1
-              
-            if i + 1 == len(string): 
-                break
+        else:
+            new_string += x
+            if count > 1:
+                new_string += str(count)
+            count = 1
 
-        new_string += string[i]
-        if count > 1:
-            new_string += str(count)
-
-        i += 1
-
-    # if last character was not repeated, add it in now
-    if not re.match(r'[0-9]', new_string[-1]):
-        new_string += string[-1]
-      
     return new_string
