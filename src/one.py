@@ -3,6 +3,7 @@ import os
 
 files = []
 def get_files_by_size(path):
+    '''Takes in a path as a string and returns a list of tuples containing the path, filename, and size'''
     for entry in os.scandir(path):
         try:
             is_dir = entry.is_dir(follow_symlinks=False)
@@ -25,6 +26,7 @@ def get_files_by_size(path):
     return sorted_files
 
 def format_size(number):
+    '''Takes in a number specified in bytes and converts to a human-readable size representation'''
     sizes = ['B', 'KB', 'MB', 'GB', 'TB']
     i = 0
     converted = number
@@ -36,7 +38,8 @@ def format_size(number):
  
     return str(round(converted, 2)) + ' ' + sizes[i]
 
-def nice_table(data):
+def format_table(data):
+    '''Formats the result of `get_files_by_size` into tabular format'''
     if not len(data):
         print('no files found for given path')
     else:
@@ -57,4 +60,5 @@ def nice_table(data):
 
 
 def run(path):
-    nice_table(get_files_by_size(path))
+    '''Called from the command line in `app.py`'''
+    format_table(get_files_by_size(path))

@@ -2,6 +2,10 @@ import itertools
 
 
 def count_recurring(string):
+    '''
+    Takes in a string of lower-case letters and returns a new string containing those letters.
+    Adjacent occurances are replaced by the number of occurrances.
+    '''
 
     new_string = ''
     i = 0
