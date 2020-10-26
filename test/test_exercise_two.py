@@ -1,6 +1,7 @@
 import unittest
 from src.two import count_recurring
 
+
 class TestExerciseTwo(unittest.TestCase):
 
     def test_no_repeating(self):
