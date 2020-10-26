@@ -21,8 +21,8 @@ class TestExerciseTwo(unittest.TestCase):
         self.assertEqual(result, 'r2d2')
 
     def test_not_repeating_at_end(self):
-        result = count_recurring('aabbcddebb')
-        self.assertEqual(result, 'a2b2cd2eb2')
+        result = count_recurring('aabbcddeb')
+        self.assertEqual(result, 'a2b2cd2eb')
 
 
 if __name__ == '__main__':

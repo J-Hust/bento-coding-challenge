@@ -8,7 +8,6 @@ def count_recurring(string):
     '''
 
     new_string = ''
-    i = 0
     count = 1
     
     for x, y in itertools.zip_longest(string, string[1:]):
